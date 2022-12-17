@@ -35,11 +35,11 @@
   check_mode: false
   register: "__docker_context"
   ignore_errors: true
-- name: "Set docker daemon endpoint location fact"
+- name: "Set Docker client endpoints fact"
   ansible.builtin.set_fact:
-    "docker_endpoint": "{{ __docker_context.stdout | from_json | community.general.json_query('[0].\"Endpoints\"') | dict2items | community.general.json_query('[*].{key: key, value: value.Host}') | items2dict }}"
+    "docker_endpoints": "{{ __docker_context.stdout | from_json | community.general.json_query('[0].\"Endpoints\"') | dict2items | community.general.json_query('[*].{key: key, value: value.Host}') | items2dict }}"
   when: "__docker_context.failed is sameas false"
-- name: Display Docker daemon endpoint location
+- name: Display Docker client endpoints
   ansible.builtin.debug:
-    var: docker_endpoint
+    var: docker_endpoints
     verbosity: 2
